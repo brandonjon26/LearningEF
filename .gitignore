@@ -1,0 +1,5 @@
+# Application Configuration
+appsettings.Development.json
+
+# Visual Studio Cache Files
+.vs/
