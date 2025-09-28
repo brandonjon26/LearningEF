@@ -30,9 +30,7 @@ namespace LearningEF.Models
 
                     // Get your service and run the main application logic
                     CarInterface carService = services.GetRequiredService<CarInterface>();
-
-                    // Assuming your service has a method like 'ProcessCarCreation' 
-                    // that handles the console input and repository call.
+                    
                     processSuccess = await carService.CreateCar(args);
 
                     if (processSuccess)
@@ -46,7 +44,7 @@ namespace LearningEF.Models
                 }
                 catch (Exception ex)
                 {
-                    // Log the error (optional, but good practice)
+                    // Log the error
                     Console.WriteLine($"An error occurred: {ex.Message}");
                 }
             }
@@ -70,7 +68,7 @@ namespace LearningEF.Models
                 // hostContext.HostingEnvironment.EnvironmentName will now ALWAYS be "Development"
                 config.AddJsonFile($"appsettings.{hostContext.HostingEnvironment.EnvironmentName}.json", optional: true, reloadOnChange: true);
 
-                // 4. Load Environment Variables (optional but good practice)
+                // 4. Load Environment Variables
                 config.AddEnvironmentVariables();
 
                 string currentEnvironment = hostContext.HostingEnvironment.EnvironmentName;

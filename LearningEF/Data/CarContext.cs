@@ -24,10 +24,5 @@ namespace LearningEF.Data
             // ALWAYS call the base implementation last
             base.OnModelCreating(modelBuilder);
         }
-
-        //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        //{
-        //    optionsBuilder.UseSqlServer("Server=localhost;Database=MyDevelopmentDB;Trusted_Connection=True;");
-        //}
     }
 }
