@@ -57,10 +57,34 @@ namespace LearningEF.Models
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
         Host.CreateDefaultBuilder(args)
+            .UseEnvironment("Development")
+            .ConfigureAppConfiguration((hostContext, config) =>
+            {
+                // 1. Clear any default configuration settings that might be confusing the system
+                config.Sources.Clear();
+
+                // 2. Load the base appsettings.json file
+                config.AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
+
+                // 3. Load the environment-specific file (appsettings.development.json)
+                // hostContext.HostingEnvironment.EnvironmentName will now ALWAYS be "Development"
+                config.AddJsonFile($"appsettings.{hostContext.HostingEnvironment.EnvironmentName}.json", optional: true, reloadOnChange: true);
+
+                // 4. Load Environment Variables (optional but good practice)
+                config.AddEnvironmentVariables();
+
+                string currentEnvironment = hostContext.HostingEnvironment.EnvironmentName;
+                Console.WriteLine($"*** ENVIRONMENT NAME: {currentEnvironment} ***");
+
+                // 5. Load Secret Manager (Will now ALWAYS load since the environment is forced to Development)
+                config.AddUserSecrets<Program>();
+            })
             .ConfigureServices((hostContext, services) =>
             {
                 IConfiguration configuration = hostContext.Configuration;
                 string connectionString = configuration.GetConnectionString("DatabaseConnection");
+
+                Console.WriteLine($"Connection string: {connectionString}");
 
                 // 1. Register the DbContext
                 services.AddDbContext<CarContext>(options =>
