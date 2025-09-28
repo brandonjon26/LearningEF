@@ -42,6 +42,7 @@ namespace LearningEF.Services
                     Console.WriteLine("Please enter the year of this car:");
                     string yearInput = Console.ReadLine();
 
+                    // Make sure input is valid
                     if (int.TryParse(yearInput, out year))
                     {
                         isValidYear = true;

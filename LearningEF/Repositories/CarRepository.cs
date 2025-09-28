@@ -18,17 +18,10 @@ namespace LearningEF.Repositories
         }
         public void AddCar(Car car)
         {
+            // Write to the database
             _context.Cars.Add(car);
             int rowsAffected = _context.SaveChanges();
             Console.WriteLine($"Successfully saved car to DB, Rows affected: {rowsAffected}");
-
-            //using (var context = new CarContext())
-            //{
-            //    context.Cars.Add(car);
-            //    int rowsAffected = context.SaveChanges();
-
-            //    Console.WriteLine($"Successfully saved car to DB, Rows affected: {rowsAffected}");
-            //}
         }
     }
 }
