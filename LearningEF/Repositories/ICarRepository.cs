@@ -10,5 +10,6 @@ namespace LearningEF.Repositories
     public interface ICarRepository
     {
         void AddCar(Car car);
+        Task<List<Car>> GetListAsync();
     }
 }

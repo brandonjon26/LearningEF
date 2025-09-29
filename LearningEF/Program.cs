@@ -30,8 +30,39 @@ namespace LearningEF.Models
 
                     // Get your service and run the main application logic
                     CarInterface carService = services.GetRequiredService<CarInterface>();
-                    
-                    processSuccess = await carService.CreateCar(args);
+
+                    // Choose how the app will run
+                    Console.WriteLine("Select mode:\n1 = Add Record\n2 = Get All Records");
+                    int mode = Convert.ToInt16(Console.ReadLine());
+
+                    switch (mode)
+                    {
+                        case 1:
+                            // Add a car
+                            processSuccess = await carService.CreateCarAsync();
+                            break;
+
+                        case 2:
+                            // Get all cars
+                            List<Car> cars = new List<Car>();
+                            (processSuccess, cars) = await carService.ListAllCarsAsync();
+
+                            if (cars.Count == 0)
+                            {
+                                Console.WriteLine("No cars found.");
+                            }
+                            else
+                            {
+                                Console.WriteLine("Here are all of the cars:\n");
+                                foreach (Car car in cars)
+                                {
+                                    Console.WriteLine($"{car.Color} {car.Make} {car.Model}");
+                                }
+
+                                Console.ReadLine();
+                            }
+                            break;
+                    }                    
 
                     if (processSuccess)
                     {
