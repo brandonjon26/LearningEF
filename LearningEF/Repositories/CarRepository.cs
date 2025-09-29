@@ -23,5 +23,11 @@ namespace LearningEF.Repositories
             int rowsAffected = _context.SaveChanges();
             Console.WriteLine($"Successfully saved car to DB, Rows affected: {rowsAffected}");
         }
+
+        public async Task<List<Car>> GetListAsync()
+        {            
+            // Get all cars from Car table
+            return await _context.Cars.ToListAsync();
+        }
     }
 }

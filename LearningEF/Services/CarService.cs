@@ -18,7 +18,7 @@ namespace LearningEF.Services
             _carRepository = carRepository;
         }
 
-        public async Task<bool> CreateCar(string[] args)
+        public async Task<bool> CreateCarAsync()
         {
             await Task.Delay(0);
             Car car = new Car();
@@ -70,6 +70,23 @@ namespace LearningEF.Services
                 Console.WriteLine(ex.Message);
                 return false;
             }            
+        }
+
+        public async Task<(bool, List<Car>)> ListAllCarsAsync()
+        {
+            List<Car> cars = new List<Car>();
+
+            try
+            {
+                cars = await _carRepository.GetListAsync();
+                return (true, cars);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                Console.ReadLine();
+                return (false, cars);
+            }
         }
     }
 }
