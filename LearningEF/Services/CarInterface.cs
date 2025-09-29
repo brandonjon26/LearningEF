@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace LearningEF.Services
 {
-    internal interface CarInterface
+    public interface CarInterface
     {
-        Task<bool> CreateCarAsync();
+        Task<bool> CreateCarAsync(Car newCar);
         Task<(bool, List<Car>)> ListAllCarsAsync();
     }
 }

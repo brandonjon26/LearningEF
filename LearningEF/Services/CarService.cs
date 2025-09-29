@@ -18,7 +18,7 @@ namespace LearningEF.Services
             _carRepository = carRepository;
         }
 
-        public async Task<bool> CreateCarAsync()
+        public async Task<bool> CreateCarAsync(Car newCar)
         {
             await Task.Delay(0);
             Car car = new Car();
