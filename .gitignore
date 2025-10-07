@@ -31,6 +31,9 @@ Thumbs.db
 *.pdb # Program Database files (debug symbols)
 *.userprefs # Rider IDE settings
 
+# Ignore the project's launch settings file (local configuration)
+**/launchSettings.json
+
 # --------------------
 # SECRETS AND CONFIGURATION
 # --------------------
