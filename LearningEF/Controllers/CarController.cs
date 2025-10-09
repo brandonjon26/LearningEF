@@ -33,7 +33,7 @@ public class CarController : ControllerBase
         }
 
         // Returns HTTP 200 OK with the list of cars serialized as JSON
-        return Ok(cars);
+        return Ok(cars.Item2);
     }
 
     // POST api/car
