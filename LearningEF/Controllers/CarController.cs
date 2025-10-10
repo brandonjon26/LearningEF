@@ -37,6 +37,22 @@ public class CarController : ControllerBase
         return Ok(cars.Item2);
     }
 
+    // Get api/Car/{id}
+    [HttpGet("{id}")]
+    public async Task<ActionResult<Car>> GetCarAsync(long id)
+    {
+        Car? car = await _carService.GetCarByIdAsync(id);
+
+        if (car == null)
+        {
+            // HTTP 404: The car was not found
+            return NotFound($"Car with ID {id} not found.");
+        }
+
+        // HTTP 200: OK (Car object was found)
+        return Ok(car);
+    }
+
     // POST api/car
     [HttpPost]
     public async Task<ActionResult<Car>> CreateCar([FromBody] Car newCar) // The [FromBody] attribute tells the framework to deserialize the JSON request body into a Car object.
@@ -63,7 +79,7 @@ public class CarController : ControllerBase
 
     // DELETE api/car/{id}
     [HttpDelete("{id}")]
-    public async Task<ActionResult<Car>> DeleteCar(int id)
+    public async Task<ActionResult<Car>> DeleteCar(long id)
     {
         bool success = await _carService.RemoveCarAsync(id);
 
@@ -77,5 +93,23 @@ public class CarController : ControllerBase
             // HTTP 404: The car was not found or deletion failed for another reason
             return NotFound($"Car with ID {id} not found.");
         }              
+    }
+
+    // UPDATE api/car/{id}
+    [HttpPut("{id}")]
+    public async Task<ActionResult<Car>> UpdateCarAsync(long id, [FromBody] Car car)
+    {
+        var (success, updatedCar) = await _carService.ChangeCarAsync(id, car);
+
+        if (success)
+        {
+            // Return 200 OK for a successful update
+            return Ok(updatedCar);
+        }
+        else
+        {
+            // HTTP 404: The car was not found or update failed
+            return NotFound($"Car with ID {id} not found.");
+        }
     }
 }
