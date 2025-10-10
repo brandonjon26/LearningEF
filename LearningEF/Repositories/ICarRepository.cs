@@ -7,12 +7,10 @@ using LearningEF.Models;
 
 namespace LearningEF.Repositories
 {
-    public interface ICarRepository
+    public interface ICarRepository : IBaseRepository<Car, long>
     {
-        void AddCar(Car car);
-        Task<int> SaveChangesAsync();
-        Task<List<Car>> GetListAsync();
-        Task<Car> GetByIdAsync(long id);
+        void AddCar(Car car);        
+        Task<List<Car>> GetListAsync();        
         void DeleteCar(Car car);
     }
 }

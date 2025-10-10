@@ -1,9 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using LearningEF.Data;         // Assuming CarContext is here
-using LearningEF.Repositories;  // Assuming ICarRepository and CarRepository are here
-using LearningEF.Services;      // Assuming CarInterface and CarService are here
+using LearningEF.Data;
+using LearningEF.Repositories;
+using LearningEF.Services;
 
 
 
@@ -25,13 +25,13 @@ builder.Services.AddDbContext<CarContext>(options =>
     options.UseSqlServer(connectionString));
 
 // Register Repositories and Services
-builder.Services.AddTransient<ICarRepository, CarRepository>();
-builder.Services.AddTransient<CarInterface, CarService>();
+builder.Services.AddScoped<ICarRepository, CarRepository>();
+builder.Services.AddScoped<CarInterface, CarService>();
 
 // Add Controller Services (and related MVC services)
 builder.Services.AddControllers();
 
-// Optional: Add Swagger/OpenAPI support for API testing documentation
+// Future Enhancement: Add Swagger/OpenAPI support for API testing documentation
 // builder.Services.AddEndpointsApiExplorer();
 // builder.Services.AddSwaggerGen();
 
@@ -46,7 +46,7 @@ var app = builder.Build();
 app.UseHttpsRedirection();
 app.UseRouting();
 
-// 4. MAP CONTROLLER ENDPOINTS HERE (Replaces UseEndpoints(endpoints => endpoints.MapControllers()))
+// 4. MAP CONTROLLER ENDPOINTS HERE
 app.MapControllers();
 
 // 5. Run the application
