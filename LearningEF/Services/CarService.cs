@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Diagnostics;
 using Microsoft.EntityFrameworkCore;
 using LearningEF.Models;
 using LearningEF.Repositories;
@@ -19,55 +20,25 @@ namespace LearningEF.Services
         }
 
         public async Task<bool> CreateCarAsync(Car newCar)
-        {
-            await Task.Delay(0);
-            Car car = new Car();
-
-            Console.WriteLine("Lets add a new Car!");
+        {            
             try
             {
-                // Get the make
-                Console.WriteLine("Please Enter the make of this car:");
-                car.Make = Console.ReadLine();
+                newCar.DateCreated = DateTime.Now;
+                newCar.DateModified = DateTime.Now;
 
-                // Get the model
-                Console.WriteLine("Please enter the model of this car:");
-                car.Model = Console.ReadLine();
+                // Stage the car for insertion
+                _carRepository.AddCar(newCar);
 
-                // Get the Year
-                int year;
-                bool isValidYear = false;
-                do
-                {
-                    Console.WriteLine("Please enter the year of this car:");
-                    string yearInput = Console.ReadLine();
+                // Commit the changes to the database
+                int rowsAffected = await _carRepository.SaveChangesAsync();
 
-                    // Make sure input is valid
-                    if (int.TryParse(yearInput, out year))
-                    {
-                        isValidYear = true;
-                        car.Year = year;
-                    }
-                    else
-                    {
-                        Console.WriteLine("Invalid year, please enter a whole number.");
-                    }
-                }
-                while (!isValidYear);
-
-                // Get the Color
-                Console.WriteLine("Enter the color of the car:");
-                car.Color = Console.ReadLine();
-
-                car.DateCreated = DateTime.Now;
-                car.DateModified = DateTime.Now;
-
-                _carRepository.AddCar(car);
-                return true;
+                return rowsAffected > 0;
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                // Log the error (placeholder for proper logging; maybe use ILogger or write my own logging)
+                Debug.WriteLine($"Error creating car: {ex.Message}");
+
                 return false;
             }            
         }
@@ -78,13 +49,14 @@ namespace LearningEF.Services
 
             try
             {
+                // Get the list of cars from the database
                 cars = await _carRepository.GetListAsync();
                 return (true, cars);
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
-                Console.ReadLine();
+                // Log the error (placeholder for proper logging; maybe use ILogger or write my own logging)
+                Debug.WriteLine($"Error getting cars: {ex.Message}");
                 return (false, cars);
             }
         }
