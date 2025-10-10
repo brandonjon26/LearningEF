@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
+using static System.Net.WebRequestMethods;
 
 // Controller for all API operations related to the Car resource
 [Route("api/[controller]")] // Sets the base route to /api/car
@@ -25,7 +26,7 @@ public class CarController : ControllerBase
         // Get the data
         var cars = await _carService.ListAllCarsAsync();
 
-        // 2. Handle the response
+        // Handle the response
         if (cars.Item1 == false || !cars.Item2.Any())
         {
             // Returns HTTP 204 No Content if the list is empty (A good REST practice)
@@ -58,5 +59,23 @@ public class CarController : ControllerBase
             // Returns HTTP 400 Bad Request
             return BadRequest("Failed to create car record.");
         }
+    }
+
+    // DELETE api/car/{id}
+    [HttpDelete("{id}")]
+    public async Task<ActionResult<Car>> DeleteCar(int id)
+    {
+        bool success = await _carService.RemoveCarAsync(id);
+
+        if (success)
+        {
+            // Return 204 No Content for a successful deletion
+            return NoContent();
+        }
+        else
+        {
+            // HTTP 404: The car was not found or deletion failed for another reason
+            return NotFound($"Car with ID {id} not found.");
+        }              
     }
 }

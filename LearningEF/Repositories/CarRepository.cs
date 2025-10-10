@@ -34,5 +34,17 @@ namespace LearningEF.Repositories
             // Get all cars from Car table
             return await _context.Cars.ToListAsync();
         }
+
+        public async Task<Car> GetByIdAsync(long carId)
+        {
+            // Get the specific car
+            return await _context.Cars.FindAsync(carId);
+        }
+
+        public void DeleteCar(Car car)
+        {
+            // Stage the car for deletion
+            _context.Cars.Remove(car);
+        }
     }
 }

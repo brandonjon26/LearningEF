@@ -60,5 +60,30 @@ namespace LearningEF.Services
                 return (false, cars);
             }
         }
+
+        public async Task<bool> RemoveCarAsync(long carId)
+        {
+            try
+            {
+                Car? car = await _carRepository.GetByIdAsync(carId);
+
+                if (car != null)
+                {
+                    // Remove the car from the database
+                    _carRepository.DeleteCar(car);
+                    int rowsAffected = await _carRepository.SaveChangesAsync();
+
+                    return rowsAffected > 0;
+                }
+
+                return false;
+            }
+            catch (Exception ex)
+            {
+                // Log the error (placeholder for proper logging; maybe use ILogger or write my own logging)
+                Debug.WriteLine($"Error removing car: {ex.Message}");
+                return false;
+            }
+        }
     }
 }
