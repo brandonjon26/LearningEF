@@ -32,7 +32,7 @@ namespace LearningEF.Repositories
         public async Task<List<Car>> GetListAsync()
         {            
             // Get all cars from Car table
-            return await _context.Cars.ToListAsync();
+            return await _context.Cars.OrderBy(car => car.CarId).ToListAsync();
         }
 
         public async Task<Car> GetByIdAsync(long carId)

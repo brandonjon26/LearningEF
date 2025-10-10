@@ -1,81 +1,53 @@
-﻿using System;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Collections.Generic;
-using LearningEF.Data;
-using LearningEF.Repositories;
-using LearningEF.Services;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Configuration;
-using Microsoft.AspNetCore.Builder; // Added for WebApplicationBuilder/Host extensions
-using Microsoft.AspNetCore.Mvc; // Added for Controller configuration
+using LearningEF.Data;         // Assuming CarContext is here
+using LearningEF.Repositories;  // Assuming ICarRepository and CarRepository are here
+using LearningEF.Services;      // Assuming CarInterface and CarService are here
 
-namespace LearningEF.Models
-{
-    public class Program
-    {
-        public static async Task Main(string[] args)
-        {
-            // Build the Web Host and Run
-            await CreateWebHostBuilder(args).Build().RunAsync();
-        }
 
-        public static IHostBuilder CreateWebHostBuilder(string[] args) =>
-            Host.CreateDefaultBuilder(args)
-                .UseEnvironment("Development") // Critical Fix preserved
-                .ConfigureAppConfiguration((hostContext, config) =>
-                {
-                    // 1. Clear default configuration sources
-                    config.Sources.Clear();
 
-                    // 2. Load the base appsettings.json file
-                    config.AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
+// -------------------------
+// 1. BUILDER CONFIGURATION
+// -------------------------
 
-                    // 3. Load the environment-specific file
-                    config.AddJsonFile($"appsettings.{hostContext.HostingEnvironment.EnvironmentName}.json", optional: true, reloadOnChange: true);
+// - Sets the default environment (including the "Development" environment from launchSettings.json).
+// - Loads appsettings.json, appsettings.{env}.json, environment variables, and User Secrets.
+var builder = WebApplication.CreateBuilder(args);
 
-                    // 4. Load Environment Variables
-                    config.AddEnvironmentVariables();
+// --------------------------------------------
+// 2. REGISTER SERVICES (Dependency Injection)
+// --------------------------------------------
 
-                    // 5. Load Secret Manager (Guaranteed to load due to UseEnvironment("Development"))
-                    config.AddUserSecrets<Program>();
-                })
-                .ConfigureWebHostDefaults(webBuilder =>
-                {
-                    // This is where web-specific services and middleware are configured.
-                    webBuilder.ConfigureServices((hostContext, services) =>
-                    {
-                        IConfiguration configuration = hostContext.Configuration;
-                        string connectionString = configuration.GetConnectionString("DatabaseConnection");
+// Register the DbContext using configuration
+var connectionString = builder.Configuration.GetConnectionString("DatabaseConnection");
+builder.Services.AddDbContext<CarContext>(options =>
+    options.UseSqlServer(connectionString));
 
-                        // 1. Register the DbContext
-                        services.AddDbContext<CarContext>(options =>
-                            options.UseSqlServer(connectionString));
+// Register Repositories and Services
+builder.Services.AddTransient<ICarRepository, CarRepository>();
+builder.Services.AddTransient<CarInterface, CarService>();
 
-                        // 2. Register Repositories and Services
-                        services.AddTransient<ICarRepository, CarRepository>();
-                        services.AddTransient<CarInterface, CarService>();
+// Add Controller Services (and related MVC services)
+builder.Services.AddControllers();
 
-                        // 3. ADD CONTROLLER SERVICES HERE
-                        services.AddControllers();
-                    });
+// Optional: Add Swagger/OpenAPI support for API testing documentation
+// builder.Services.AddEndpointsApiExplorer();
+// builder.Services.AddSwaggerGen();
 
-                    webBuilder.Configure(app =>
-                    {
-                        // Standard middleware for routing and authorization/authentication
-                        app.UseRouting();
-                        // app.UseAuthorization(); // Add this line if needed later
+// --------------------------------------------
+// 3. BUILD AND CONFIGURE APPLICATION PIPELINE
+// --------------------------------------------
 
-                        // 4. MAP CONTROLLER ENDPOINTS HERE
-                        app.UseEndpoints(endpoints =>
-                        {
-                            endpoints.MapControllers();
-                        });
-                    });
-                });
-    }
-}
+var app = builder.Build();
+
+// Configure the HTTP Request Pipeline (Middleware)
+// Order matters for middleware:
+app.UseHttpsRedirection();
+app.UseRouting();
+
+// 4. MAP CONTROLLER ENDPOINTS HERE (Replaces UseEndpoints(endpoints => endpoints.MapControllers()))
+app.MapControllers();
+
+// 5. Run the application
+await app.RunAsync();
