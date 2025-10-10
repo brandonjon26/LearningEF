@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-using LearningEF.Models;
-using LearningEF.Data;
+using LearningEF.Api.Models;
+using LearningEF.Api.Data;
 
-namespace LearningEF.Repositories
+namespace LearningEF.Api.Repositories
 {
     public class CarRepository : BaseRepository<Car, long>, ICarRepository
     {       

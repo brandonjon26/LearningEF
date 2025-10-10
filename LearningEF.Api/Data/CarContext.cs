@@ -4,9 +4,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using LearningEF.Models;
+using LearningEF.Api.Models;
 
-namespace LearningEF.Data
+namespace LearningEF.Api.Data
 {
     public class CarContext : DbContext
     {

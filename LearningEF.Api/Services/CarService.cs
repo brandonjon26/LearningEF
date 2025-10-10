@@ -5,10 +5,10 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Diagnostics;
 using Microsoft.EntityFrameworkCore;
-using LearningEF.Models;
-using LearningEF.Repositories;
+using LearningEF.Api.Models;
+using LearningEF.Api.Repositories;
 
-namespace LearningEF.Services
+namespace LearningEF.Api.Services
 {
     public class CarService : CarInterface
     {

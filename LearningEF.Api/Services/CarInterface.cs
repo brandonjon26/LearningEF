@@ -1,11 +1,11 @@
-﻿using LearningEF.Models;
+﻿using LearningEF.Api.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LearningEF.Services
+namespace LearningEF.Api.Services
 {
     public interface CarInterface
     {

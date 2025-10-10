@@ -1,5 +1,5 @@
-﻿using LearningEF.Models; // Ensure this references your Car model
-using LearningEF.Services;
+﻿using LearningEF.Api.Models;
+using LearningEF.Api.Services;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;

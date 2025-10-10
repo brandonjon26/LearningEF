@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LearningEF.Models
+namespace LearningEF.Api.Models
 {
     public class Car
     {
