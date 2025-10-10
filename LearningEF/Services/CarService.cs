@@ -43,6 +43,12 @@ namespace LearningEF.Services
             }            
         }
 
+        public async Task<Car?> GetCarByIdAsync(long carId)
+        {
+            // Go get the car
+            return await _carRepository.GetByIdAsync(carId);
+        }
+
         public async Task<(bool, List<Car>)> ListAllCarsAsync()
         {
             List<Car> cars = new List<Car>();
@@ -85,5 +91,38 @@ namespace LearningEF.Services
                 return false;
             }
         }
+
+        public async Task<(bool, Car?)> ChangeCarAsync(long carId, Car updatedCar)
+        {
+            // Get the existing car from the database
+            Car? existingCar = await _carRepository.GetByIdAsync(carId);
+
+            try
+            {
+                if (existingCar != null)
+                {
+                    // Map new properties
+                    existingCar.Make = updatedCar.Make;
+                    existingCar.Model = updatedCar.Model;
+                    existingCar.Year = updatedCar.Year;
+                    existingCar.Color = updatedCar.Color;
+                    existingCar.DateModified = DateTime.Now;
+
+                    // Commit the change
+                    int rowsAffected = await _carRepository.SaveChangesAsync();
+
+                    return (rowsAffected > 0, existingCar);
+                }
+
+                // Car was not found
+                return (false, null);
+            }
+            catch (Exception ex)
+            {
+                // Log the error (placeholder for proper logging; maybe use ILogger or write my own logging)
+                Debug.WriteLine($"Error removing car: {ex.Message}");
+                return (false, null);
+            }
+        } 
     }
 }
