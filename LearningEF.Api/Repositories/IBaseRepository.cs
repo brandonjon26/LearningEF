@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace LearningEF.Repositories
+namespace LearningEF.Api.Repositories
 {
     public interface IBaseRepository<T, TId> where T : class
     {

@@ -1,9 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using LearningEF.Data;
-using LearningEF.Repositories;
-using LearningEF.Services;
+using LearningEF.Api.Services;
+using LearningEF.Api.Data;
+using LearningEF.Api.Repositories;
 
 
 

@@ -1,7 +1,7 @@
-﻿using LearningEF.Models;
+﻿using LearningEF.Api.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace LearningEF.Repositories
+namespace LearningEF.Api.Repositories
 {
     public abstract class BaseRepository<T, TId> : IBaseRepository<T, TId> where T : class
     {
