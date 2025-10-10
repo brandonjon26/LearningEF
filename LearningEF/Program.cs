@@ -7,6 +7,9 @@ using LearningEF.Services;
 
 
 
+// Static name for the policy
+const string MyAllowFrontendPolicy = "AllowFrontend";
+
 // -------------------------
 // 1. BUILDER CONFIGURATION
 // -------------------------
@@ -28,6 +31,22 @@ builder.Services.AddDbContext<CarContext>(options =>
 builder.Services.AddScoped<ICarRepository, CarRepository>();
 builder.Services.AddScoped<CarInterface, CarService>();
 
+// Add CORS Service
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: MyAllowFrontendPolicy,
+        builder =>
+        {
+            // IMPORTANT: In production, replace localhost with 
+            // domain of your React app (e.g., WithOrigins("https://my-app.com"))
+            // For development, allow the React default port (3000)
+            builder.WithOrigins("http://localhost:3000")
+                   .AllowAnyHeader()
+                   .AllowAnyMethod()
+                   .AllowCredentials(); // Often needed for auth/cookies later
+        });
+});
+
 // Add Controller Services (and related MVC services)
 builder.Services.AddControllers();
 
@@ -45,6 +64,11 @@ var app = builder.Build();
 // Order matters for middleware:
 app.UseHttpsRedirection();
 app.UseRouting();
+
+// Activate CORS Here
+app.UseCors(MyAllowFrontendPolicy);
+
+app.UseAuthorization();
 
 // 4. MAP CONTROLLER ENDPOINTS HERE
 app.MapControllers();
