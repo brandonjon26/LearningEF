@@ -11,5 +11,6 @@ namespace LearningEF.Services
     {
         Task<bool> CreateCarAsync(Car newCar);
         Task<(bool, List<Car>)> ListAllCarsAsync();
+        Task<bool> RemoveCarAsync(long id);
     }
 }

@@ -12,5 +12,7 @@ namespace LearningEF.Repositories
         void AddCar(Car car);
         Task<int> SaveChangesAsync();
         Task<List<Car>> GetListAsync();
+        Task<Car> GetByIdAsync(long id);
+        void DeleteCar(Car car);
     }
 }
