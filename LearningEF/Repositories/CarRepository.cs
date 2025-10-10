@@ -16,13 +16,18 @@ namespace LearningEF.Repositories
         {
             _context = context;
         }
+
+        public async Task<int> SaveChangesAsync()
+        {
+            // Write changes to the database
+            return await _context.SaveChangesAsync();
+        }
+
         public void AddCar(Car car)
         {
-            // Write to the database
-            _context.Cars.Add(car);
-            int rowsAffected = _context.SaveChanges();
-            Console.WriteLine($"Successfully saved car to DB, Rows affected: {rowsAffected}");
-        }
+            // Stage changes to the database
+            _context.Cars.Add(car);            
+        }        
 
         public async Task<List<Car>> GetListAsync()
         {            

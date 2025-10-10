@@ -22,7 +22,7 @@ public class CarController : ControllerBase
     [HttpGet]
     public async Task<ActionResult<IEnumerable<Car>>> GetAllCars()
     {
-        // 1. Call the service layer to get the data
+        // Get the data
         var cars = await _carService.ListAllCarsAsync();
 
         // 2. Handle the response
@@ -38,12 +38,14 @@ public class CarController : ControllerBase
 
     // POST api/car
     [HttpPost]
-    public async Task<ActionResult<Car>> CreateCar([FromBody] Car newCar)
+    public async Task<ActionResult<Car>> CreateCar([FromBody] Car newCar) // The [FromBody] attribute tells the framework to deserialize the JSON request body into a Car object.
     {
-        // The [FromBody] attribute tells the framework to deserialize the JSON request body into a Car object.
+        if (!ModelState.IsValid)
+        {
+            return BadRequest(ModelState);
+        }        
 
-        // 1. Call the service layer to create the record
-        // NOTE: You may need to update your CarService.CreateCarAsync to accept a Car object instead of parsing console input.
+        // Only if ModelState is valid do we try to write this record
         bool success = await _carService.CreateCarAsync(newCar);
 
         if (success)
