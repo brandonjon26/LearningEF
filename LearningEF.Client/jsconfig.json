@@ -1,0 +1,16 @@
+{
+  "compilerOptions": {
+    "module": "esnext",
+    "moduleResolution": "bundler", // Or "node" depending on your Vite version, "bundler" is modern
+    "target": "es2020",
+    "jsx": "react-jsx",
+
+    // Alias configuration for VS Code Intellisense:
+    "baseUrl": ".", // Start looking for files from the client root
+    "paths": {
+      "@/*": ["./src/*"] // Map '@/*' to the actual 'src/*' folder
+    }
+  },
+  "include": ["src"], // Only include files inside the src folder
+  "exclude": ["node_modules", "dist"]
+}

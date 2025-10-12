@@ -1,0 +1,121 @@
+/* LearningEF.Client/src/components/CarCard/CarCard.css */
+
+.car-card {
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  background-color: var(--color-background);
+  transition: transform 0.2s;
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+}
+
+.car-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+}
+
+.car-title {
+  color: var(--color-primary);
+  margin-top: 0;
+  margin-bottom: 10px;
+  font-size: 1.5em;
+}
+
+.car-details p {
+  margin: 5px 0;
+  font-size: 0.95em;
+}
+
+.car-id {
+  font-size: 0.75em;
+  color: var(--color-secondary);
+  align-self: flex-end; /* Push ID to the top right */
+}
+
+.car-actions {
+  margin-top: 15px;
+  padding-top: 10px;
+  border-top: 1px dashed var(--color-border);
+  display: flex;
+  gap: 10px;
+}
+
+.car-actions button {
+  padding: 8px 15px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background-color 0.15s;
+}
+
+.btn-edit {
+  background-color: #3b82f6; /* Blue */
+  color: white;
+}
+
+.btn-delete {
+  background-color: #f87171; /* Red */
+  color: white;
+}
+
+.btn-edit:hover {
+  background-color: #2563eb;
+}
+.btn-delete:hover {
+  background-color: #ef4444;
+}
+
+/* --- Tooltip Styles --- */
+
+.tooltip-container {
+  /* Required for positioning the tooltip text relative to the button/icon */
+  position: relative;
+  display: inline-block;
+}
+
+.tooltip-text {
+  /* Initial state: Hidden */
+  visibility: hidden;
+
+  /* Styling */
+  background-color: #333;
+  color: #fff;
+  text-align: center;
+  border-radius: 4px;
+  padding: 5px 8px;
+  font-size: 0.8em;
+  white-space: nowrap; /* Keep text on one line */
+  z-index: 10; /* Ensure it floats above other elements */
+
+  /* Positioning (Example: centered above the icon) */
+  position: absolute;
+  bottom: 125%; /* Position above the container */
+  left: 50%;
+  transform: translateX(-50%); /* Center the tooltip horizontally */
+
+  /* Transition for a smoother appearance */
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+/* State change: Show the tooltip when the container is hovered */
+.tooltip-container:hover .tooltip-text {
+  visibility: visible;
+  opacity: 1;
+}
+
+/* Optional: Add a small pointer arrow */
+.tooltip-text::after {
+  content: "";
+  position: absolute;
+  top: 100%; /* At the bottom of the tooltip */
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: #333 transparent transparent transparent;
+}
