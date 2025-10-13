@@ -23,3 +23,32 @@ export const getCars = async () => {
     throw error;
   }
 };
+
+export const addCar = async (data) => {
+  try {
+    const response = await fetch(CARS_URL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    });
+
+    if (!response.ok) {
+      // Throw an error if the HTTP status code indicates failure (4xx or 5xx)
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    const contentType = response.headers.get("content-type");
+
+    if (contentType && contentType.includes("application/json")) {
+      return await response.json();
+    }
+
+    return null;
+  } catch (error) {
+    // Log the error for debugging and re-throw to be handled by the component
+    console.error("failed to add car:", error);
+    throw error;
+  }
+};

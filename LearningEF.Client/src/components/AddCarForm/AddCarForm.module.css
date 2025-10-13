@@ -1,0 +1,79 @@
+.add-car-form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px; /* Spacing between form groups */
+  padding: 0;
+  margin: 0;
+  border: none;
+}
+
+.add-car-form h2 {
+  color: limegreen;
+  border-bottom: 1px solid var(--color-border);
+  padding-bottom: 10px;
+  margin-top: 0;
+  margin-bottom: 15px;
+  text-align: left;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+}
+
+.form-group label {
+  font-weight: 600;
+  margin-bottom: 5px;
+  color: var(--color-text);
+  font-size: 0.95em;
+}
+
+.form-group input {
+  padding: 10px;
+  border: 1px solid var(--color-border);
+  border-radius: 4px;
+  font-size: 1em;
+  transition: border-color 0.2s;
+}
+
+.form-group input:focus {
+  border-color: var(--color-primary);
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(30, 64, 175, 0.2); /* Soft blue glow */
+}
+
+/* Submission Button */
+.submit-button {
+  padding: 12px 20px;
+  background-color: limegreen;
+  color: white;
+  font-weight: bold;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-top: 10px;
+  transition: background-color 0.15s, opacity 0.15s;
+}
+
+.submit-button:hover:not(:disabled) {
+  background-color: forestgreen; /* Slightly darker blue */
+}
+
+.submit-button:disabled {
+  background-color: var(--color-secondary); /* Gray when disabled */
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+/* Error Message */
+.form-error {
+  padding: 10px;
+  background-color: #fee2e2; /* Light red background */
+  color: #b91c1c; /* Dark red text */
+  border: 1px solid #fca5a5;
+  border-radius: 4px;
+  margin-bottom: 10px;
+  font-size: 0.9em;
+  text-align: left;
+}
