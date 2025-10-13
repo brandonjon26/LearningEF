@@ -17,6 +17,7 @@ namespace LearningEF.Api.Models
         [Range(1900, 2026, ErrorMessage = "Year must be between 1900 and the current year plus one.")]
         public int Year { get; set; }
         public string? Color { get; set; } = "";
+        public decimal Price { get; set; } = 0.00m;
         public DateTime DateCreated { get; set; } = new DateTime(1900, 01, 01);
         public DateTime DateModified { get; set; } = new DateTime(1900, 01, 01);
     }

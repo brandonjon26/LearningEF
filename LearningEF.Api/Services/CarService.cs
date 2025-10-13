@@ -106,6 +106,7 @@ namespace LearningEF.Api.Services
                     existingCar.Model = updatedCar.Model;
                     existingCar.Year = updatedCar.Year;
                     existingCar.Color = updatedCar.Color;
+                    existingCar.Price = updatedCar.Price;
                     existingCar.DateModified = DateTime.Now;
 
                     // Commit the change

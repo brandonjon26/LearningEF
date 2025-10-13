@@ -1,0 +1,41 @@
+.dashboard-container {
+  padding: 20px;
+  width: 100%;
+  /* Ensure the container uses the full width established in index.css */
+}
+
+.content-layout {
+  display: flex;
+  gap: 30px; /* Space between the two columns (List and Form) */
+  align-items: flex-start;
+}
+
+.list-panel {
+  /* List takes up more horizontal space */
+  flex: 2;
+  min-width: 0;
+}
+
+.form-panel {
+  /* Form takes up less horizontal space */
+  flex: 1;
+  min-width: 300px;
+  padding: 20px;
+  background-color: var(--color-background);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+}
+
+/* Optional: Basic responsiveness for smaller screens */
+@media (max-width: 1024px) {
+  .content-layout {
+    flex-direction: column;
+  }
+  .list-panel,
+  .form-panel {
+    flex: auto;
+    width: 100%;
+    min-width: auto;
+  }
+}

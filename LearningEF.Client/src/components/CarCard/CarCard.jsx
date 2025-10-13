@@ -20,9 +20,7 @@ const CarCard = ({ car }) => {
   }
 
   return (
-    // Use a descriptive className for CSS targeting
     <div className={styles["car-card"]}>
-      {/* Display the ID (useful for debugging and key in lists) */}
       <div className={styles["car-id"]}>ID: {car.carId}</div>
 
       {/* Main Title: Make and Model */}
@@ -49,7 +47,6 @@ const CarCard = ({ car }) => {
         </p>
       </div>
 
-      {/* Action buttons (for future CRUD functionality: Edit/Delete) */}
       <div className={styles["car-actions"]}>
         <TooltipWrapper text="Edit">
           <button className={styles["btn-edit"]}>📝</button>
