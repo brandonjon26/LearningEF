@@ -2,7 +2,7 @@ import React from "react";
 import CarCard from "../CarCard/CarCard";
 import styles from "./CarList.module.css";
 
-const CarList = ({ cars, loading, error }) => {
+const CarList = ({ cars, loading, error, onEdit }) => {
   // --- Conditional Rendering
   if (loading) {
     return <div className={styles["car-list-status"]}>Loading car data...</div>;
@@ -27,7 +27,7 @@ const CarList = ({ cars, loading, error }) => {
 
       <div className={styles["car-list"]}>
         {cars.map((car) => (
-          <CarCard key={car.carId} car={car} />
+          <CarCard key={car.carId} car={car} onEdit={onEdit} />
         ))}
       </div>
     </div>

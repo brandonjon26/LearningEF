@@ -2,16 +2,10 @@ import React from "react";
 import { useState } from "react";
 import { useEffect } from "react";
 import styles from "./CarCard.module.css";
-
-const TooltipWrapper = ({ children, text }) => (
-  <div className={styles["tooltip-container"]}>
-    {children}
-    <span className={styles["tooltip-text"]}>{text}</span>
-  </div>
-);
+import TooltipWrapper from "../../utils/TooltipWrapper/TooltipWrapper";
 
 // Destructure the car object directly from props for clean access
-const CarCard = ({ car }) => {
+const CarCard = ({ car, onEdit }) => {
   // Defensive Coding: Check if a car object was actually passed
   if (!car) {
     return (
@@ -49,7 +43,9 @@ const CarCard = ({ car }) => {
 
       <div className={styles["car-actions"]}>
         <TooltipWrapper text="Edit">
-          <button className={styles["btn-edit"]}>📝</button>
+          <button className={styles["btn-edit"]} onClick={() => onEdit(car)}>
+            📝
+          </button>
         </TooltipWrapper>
         <TooltipWrapper text="Delete">
           <button className={styles["btn-delete"]}>🗑️</button>
