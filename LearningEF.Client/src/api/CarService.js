@@ -86,3 +86,23 @@ export const updateCar = async (carId, carData) => {
     throw error;
   }
 };
+
+export const deleteCar = async (carId) => {
+  const DELETE_URL = `${CARS_URL}/${carId}`;
+
+  try {
+    const response = await fetch(DELETE_URL, {
+      method: "DELETE",
+    });
+
+    if (!response.ok) {
+      // Check for 4xx or 5xx errors
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    return carId;
+  } catch (error) {
+    console.error(`Failed to delete car ${carId}:`, error);
+    throw error;
+  }
+};

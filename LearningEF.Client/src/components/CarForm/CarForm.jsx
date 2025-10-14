@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { addCar, updateCar } from "../../api/carService"; // Import the service function
+import { addCar, updateCar } from "../../api/CarService"; // Import the service function
 import TooltipWrapper from "../../utils/TooltipWrapper/TooltipWrapper";
 import styles from "./CarForm.module.css";
 
@@ -24,8 +24,6 @@ const CarForm = ({ initialCar, onSubmissionSuccess, onCancel }) => {
   // Use useEffect to load data when the component mounts or initialCar changes
   useEffect(() => {
     if (isEditing && initialCar) {
-      // Pre-fill the form with the car data
-      // Convert year and price back to strings for the input fields
       setFormData({
         make: initialCar.make,
         model: initialCar.model,
@@ -52,7 +50,7 @@ const CarForm = ({ initialCar, onSubmissionSuccess, onCancel }) => {
 
   // Create the submission handler
   const handleSubmit = async (e) => {
-    e.preventDefault(); // REQUIRED: Stops the browser's default form submission (page reload)
+    e.preventDefault(); // Stops the browser's default form submission (page reload)
 
     // Basic data conversion/validation
     const carDataToSend = {
@@ -86,9 +84,6 @@ const CarForm = ({ initialCar, onSubmissionSuccess, onCancel }) => {
       // Success: Notify parent and reset form (or close edit mode)
       onSubmissionSuccess(submittedCar);
       setFormData(initialCarState);
-      // if (onCarAdded) {
-      //   onCarAdded(newCar); // Notifies parent to refresh list
-      // }
     } catch (err) {
       setError(`Submission failed: ${err.message}. Check API status.`);
       console.error("Form Submission Error:", err);
@@ -131,7 +126,7 @@ const CarForm = ({ initialCar, onSubmissionSuccess, onCancel }) => {
         <label htmlFor="year">Year</label>
         <input
           id="year"
-          type="number" // Use number type for better mobile keyboard/input validation
+          type="number"
           name="year"
           value={formData.year}
           onChange={handleInputChange}

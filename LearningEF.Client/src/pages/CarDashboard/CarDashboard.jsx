@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from "react";
-import { getCars } from "../../api/carService"; // Import the service function
+import { getCars, deleteCar } from "../../api/CarService"; // Import the service function
 import CarList from "../../components/CarList/CarList"; // Import the UI component
 import CarForm from "../../components/CarForm/CarForm";
 import styles from "./CarDashboard.module.css";
@@ -75,6 +75,21 @@ const CarDashboard = () => {
     stopEdit();
   };
 
+  const handleDelete = async (carId) => {
+    // Optimistically update: Instantly remove the car from the list
+    setCars((prevCars) =>
+      (prevCars || []).filter((car) => car.carId !== carId)
+    );
+
+    try {
+      await deleteCar(carId);
+    } catch (error) {
+      console.error(`Failed to delete car ${carId}.`, error);
+
+      // In the future: Simple Error Revert (for future reference)
+    }
+  };
+
   return (
     <div className={styles["dashboard-container"]}>
       {/* The main content layout area */}
@@ -87,6 +102,7 @@ const CarDashboard = () => {
             loading={loading}
             error={error}
             onEdit={startEdit}
+            onDelete={handleDelete}
           />
         </div>
 
