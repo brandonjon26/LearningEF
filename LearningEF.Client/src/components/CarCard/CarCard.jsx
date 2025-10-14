@@ -5,7 +5,7 @@ import styles from "./CarCard.module.css";
 import TooltipWrapper from "../../utils/TooltipWrapper/TooltipWrapper";
 
 // Destructure the car object directly from props for clean access
-const CarCard = ({ car, onEdit }) => {
+const CarCard = ({ car, onEdit, onDelete }) => {
   // Defensive Coding: Check if a car object was actually passed
   if (!car) {
     return (
@@ -48,7 +48,12 @@ const CarCard = ({ car, onEdit }) => {
           </button>
         </TooltipWrapper>
         <TooltipWrapper text="Delete">
-          <button className={styles["btn-delete"]}>🗑️</button>
+          <button
+            className={styles["btn-delete"]}
+            onClick={() => onDelete(car.carId)}
+          >
+            🗑️
+          </button>
         </TooltipWrapper>
       </div>
     </div>
