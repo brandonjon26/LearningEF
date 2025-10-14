@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { getCars } from "../../api/carService"; // Import the service function
 import CarList from "../../components/CarList/CarList"; // Import the UI component
-import AddCarForm from "../../components/AddCarForm/AddCarForm";
+import CarForm from "../../components/CarForm/CarForm";
 import styles from "./CarDashboard.module.css";
 
 const CarDashboard = () => {
@@ -10,6 +10,8 @@ const CarDashboard = () => {
   // UI/Logic indicators
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  // Editing Car
+  const [editingCar, setEditingCar] = useState(null);
 
   // Define Fetch Logic in a reusable function (*useCallback*)
   const fetchCars = useCallback(async () => {
@@ -48,6 +50,31 @@ const CarDashboard = () => {
     }
   };
 
+  // Function to start editing car
+  const startEdit = (car) => {
+    setEditingCar(car);
+  };
+
+  // Function to stop editing
+  const stopEdit = () => {
+    setEditingCar(null);
+  };
+
+  const handleCarUpdated = (updatedCar) => {
+    // Optimistically update the list by finding the old car and replacing it.
+    setCars((prevCars) =>
+      (prevCars || []).map(
+        (car) =>
+          car.carId === updatedCar.carId
+            ? updatedCar // Found the match: replace it with the new data
+            : car // No match: keep the old car object
+      )
+    );
+
+    // Clear the editing state to close the form
+    stopEdit();
+  };
+
   return (
     <div className={styles["dashboard-container"]}>
       {/* The main content layout area */}
@@ -55,13 +82,25 @@ const CarDashboard = () => {
         {/* Left Side: Car List */}
         <div className={styles["list-panel"]}>
           {/* Pass the state to the presentational component */}
-          <CarList cars={cars} loading={loading} error={error} />
+          <CarList
+            cars={cars}
+            loading={loading}
+            error={error}
+            onEdit={startEdit}
+          />
         </div>
 
         {/* Right Side: Add Car Form */}
         <div className={styles["form-panel"]}>
-          {/* Placeholder for the form component */}
-          <AddCarForm onCarAdded={handleCarAdded} />
+          {editingCar ? (
+            <CarForm
+              initialCar={editingCar}
+              onSubmissionSuccess={handleCarUpdated}
+              onCancel={stopEdit}
+            />
+          ) : (
+            <CarForm initialCar={null} onSubmissionSuccess={handleCarAdded} />
+          )}
         </div>
       </div>
     </div>

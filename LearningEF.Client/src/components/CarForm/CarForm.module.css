@@ -1,13 +1,14 @@
-.add-car-form {
+.car-form {
   display: flex;
   flex-direction: column;
   gap: 15px; /* Spacing between form groups */
   padding: 0;
   margin: 0;
   border: none;
+  align-items: stretch;
 }
 
-.add-car-form h2 {
+.car-form h2 {
   color: limegreen;
   border-bottom: 1px solid var(--color-border);
   padding-bottom: 10px;
@@ -43,29 +44,6 @@
   box-shadow: 0 0 0 2px rgba(30, 64, 175, 0.2); /* Soft blue glow */
 }
 
-/* Submission Button */
-.submit-button {
-  padding: 12px 20px;
-  background-color: limegreen;
-  color: white;
-  font-weight: bold;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  margin-top: 10px;
-  transition: background-color 0.15s, opacity 0.15s;
-}
-
-.submit-button:hover:not(:disabled) {
-  background-color: forestgreen; /* Slightly darker blue */
-}
-
-.submit-button:disabled {
-  background-color: var(--color-secondary); /* Gray when disabled */
-  cursor: not-allowed;
-  opacity: 0.7;
-}
-
 /* Error Message */
 .form-error {
   padding: 10px;
@@ -76,4 +54,60 @@
   margin-bottom: 10px;
   font-size: 0.9em;
   text-align: left;
+}
+
+/* Submission Button */
+.submit-button {
+  padding: 12px 20px;
+  background-color: limegreen;
+  color: white;
+  font-weight: bold;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.15s, opacity 0.15s;
+}
+
+.submit-button:hover:not(:disabled) {
+  background-color: forestgreen;
+}
+
+.submit-button:disabled {
+  background-color: var(--color-secondary); /* Gray when disabled */
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+.cancel-button {
+  padding: 12px 20px;
+  background-color: #36454f; /* Charcoal Grey */
+  color: var(--color-text);
+  font-weight: bold;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.15s;
+}
+
+.cancel-button:hover {
+  background-color: #1b1b1b; /* Obsidian Black */
+}
+
+.button-item {
+  flex: 1;
+  width: auto;
+  display: block;
+}
+
+.submit-button,
+.cancel-button {
+  width: 100%; /* Key: Allow flexible width */
+  margin-top: 0; /* Key: Rely on the button-group margin */
+}
+
+.button-group {
+  display: flex;
+  gap: 10px; /* Space between Save and Cancel */
+  margin-top: 15px;
+  width: 100%;
 }
