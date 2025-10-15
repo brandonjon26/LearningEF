@@ -1,17 +1,15 @@
 import React, { useState, useEffect, useCallback } from "react";
+import { flushSync } from "react-dom";
 import { getCars, deleteCar } from "../../api/CarService"; // Import the service function
 import CarList from "../../components/CarList/CarList"; // Import the UI component
 import CarForm from "../../components/CarForm/CarForm";
 import styles from "./CarDashboard.module.css";
 
 const CarDashboard = () => {
-  // Data storage
-  const [cars, setCars] = useState([]);
-  // UI/Logic indicators
-  const [loading, setLoading] = useState(true);
+  const [cars, setCars] = useState([]); // Data storage
+  const [loading, setLoading] = useState(true); // UI/Logic indicators
   const [error, setError] = useState(null);
-  // Editing Car
-  const [editingCar, setEditingCar] = useState(null);
+  const [editingCar, setEditingCar] = useState(null); // Editing Car
 
   // Define Fetch Logic in a reusable function (*useCallback*)
   const fetchCars = useCallback(async () => {
@@ -83,10 +81,21 @@ const CarDashboard = () => {
 
     try {
       await deleteCar(carId);
+      console.log(`Successfully deleted car ID: ${carId}`); // Wtite success message
     } catch (error) {
+      // Write error message
       console.error(`Failed to delete car ${carId}.`, error);
 
-      // In the future: Simple Error Revert (for future reference)
+      // Display message to the user
+      flushSync(() => {
+        setError("Error deleting car. Reverting list.");
+      });
+
+      // Clear the error message and Revert the list
+      setTimeout(async () => {
+        await fetchCars();
+        setError(null);
+      }, 2500);
     }
   };
 
@@ -112,10 +121,15 @@ const CarDashboard = () => {
             <CarForm
               initialCar={editingCar}
               onSubmissionSuccess={handleCarUpdated}
+              onApiError={fetchCars}
               onCancel={stopEdit}
             />
           ) : (
-            <CarForm initialCar={null} onSubmissionSuccess={handleCarAdded} />
+            <CarForm
+              initialCar={null}
+              onSubmissionSuccess={handleCarAdded}
+              onApiError={fetchCars}
+            />
           )}
         </div>
       </div>
