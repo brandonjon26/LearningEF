@@ -12,7 +12,7 @@ const initialCarState = {
   price: "", // Keep this as a string for input purposes
 };
 
-const CarForm = ({ initialCar, onSubmissionSuccess, onCancel }) => {
+const CarForm = ({ initialCar, onSubmissionSuccess, onApiError, onCancel }) => {
   // Determine mode: If initialCar exists, we are in Edit mode
   const isEditing = !!initialCar;
 
@@ -85,6 +85,10 @@ const CarForm = ({ initialCar, onSubmissionSuccess, onCancel }) => {
       onSubmissionSuccess(submittedCar);
       setFormData(initialCarState);
     } catch (err) {
+      if (onApiError) {
+        await onApiError();
+      }
+
       setError(`Submission failed: ${err.message}. Check API status.`);
       console.error("Form Submission Error:", err);
     } finally {
