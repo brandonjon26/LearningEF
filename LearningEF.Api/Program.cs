@@ -26,10 +26,13 @@ var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("DatabaseConnection");
 builder.Services.AddDbContext<CarContext>(options =>
     options.UseSqlServer(connectionString));
+builder.Services.AddDbContext<AppLogContext>(options => 
+    options.UseSqlServer(connectionString));
 
 // Register Repositories and Services
 builder.Services.AddScoped<ICarRepository, CarRepository>();
 builder.Services.AddScoped<CarInterface, CarService>();
+builder.Services.AddScoped<LogWriterInterface, LogWriterService>();
 
 // Add CORS Service
 builder.Services.AddCors(options =>
