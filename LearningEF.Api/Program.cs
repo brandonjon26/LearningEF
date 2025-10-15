@@ -43,7 +43,7 @@ builder.Services.AddCors(options =>
             // IMPORTANT: In production, replace localhost with 
             // domain of your React app (e.g., WithOrigins("https://my-app.com"))
             // For development, allow the React default port (3000)
-            builder.WithOrigins("http://localhost:3000")
+            builder.WithOrigins("http://localhost:3000", "http://localhost:60000")
                    .AllowAnyHeader()
                    .AllowAnyMethod()
                    .AllowCredentials(); // Often needed for auth/cookies later
@@ -53,9 +53,8 @@ builder.Services.AddCors(options =>
 // Add Controller Services (and related MVC services)
 builder.Services.AddControllers();
 
-// Future Enhancement: Add Swagger/OpenAPI support for API testing documentation
-// builder.Services.AddEndpointsApiExplorer();
-// builder.Services.AddSwaggerGen();
+// Register Swagger
+builder.Services.AddSwaggerGen();
 
 // --------------------------------------------
 // 3. BUILD AND CONFIGURE APPLICATION PIPELINE
@@ -63,9 +62,19 @@ builder.Services.AddControllers();
 
 var app = builder.Build();
 
+if (app.Environment.IsDevelopment())
+{
+    // These two lines enable the Swagger JSON endpoint and the Swagger UI
+    app.UseSwagger();
+    app.UseSwaggerUI();
+}
+
 // Configure the HTTP Request Pipeline (Middleware)
 // Order matters for middleware:
-app.UseHttpsRedirection();
+if (!app.Environment.IsDevelopment())
+{
+    app.UseHttpsRedirection();
+}
 app.UseRouting();
 
 // Activate CORS Here
