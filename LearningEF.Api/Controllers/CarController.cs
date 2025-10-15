@@ -66,8 +66,13 @@ public class CarController : ControllerBase
 
             if (car == null)
             {
-                // Log car not founc
-                await _logWriterService.LogInformationAsync($"The specific car was not found - carId {id}", nameof(CarController));
+                // Log car not found
+                await _logWriterService.WriteLogAsync(
+                    LearningEF.Api.Models.LogLevel.Warning, 
+                    $"{nameof(CarController)} The specific car was not found - carId {id}",
+                    null,
+                    new { CarIdAttempted = id }
+                );
 
                 // HTTP 404: The car was not found
                 return NotFound($"Car with ID {id} not found.");
@@ -105,7 +110,12 @@ public class CarController : ControllerBase
             if (success)
             {
                 // Log successful creation
-                await _logWriterService.LogInformationAsync($"Car created successfully: {newCar.CarId}", nameof(CarController));
+                await _logWriterService.WriteLogAsync(
+                    LearningEF.Api.Models.LogLevel.Information, 
+                    $"{nameof(CarController)} Car created successfully: {newCar.CarId}", 
+                    null, 
+                    new { CarId = newCar.CarId, Make = newCar.Make, Model = newCar.Model }
+                );
 
                 // Returns HTTP 201 Created
                 return CreatedAtAction(nameof(GetAllCars), newCar);
@@ -144,8 +154,13 @@ public class CarController : ControllerBase
             }
             else
             {
-                // Log car not founc
-                await _logWriterService.LogInformationAsync($"The specific car was not found - carId {id}", nameof(CarController));
+                // Log car not found
+                await _logWriterService.WriteLogAsync(
+                    LearningEF.Api.Models.LogLevel.Warning, 
+                    $"{nameof(CarController)} The specific car was not found - carId {id}",
+                    null,
+                    new { CarIdAttempted = id }
+                );
 
                 // HTTP 404: The car was not found or deletion failed for another reason
                 return NotFound($"Car with ID {id} not found.");
@@ -176,8 +191,13 @@ public class CarController : ControllerBase
             }
             else
             {
-                // Log car not founc
-                await _logWriterService.LogInformationAsync($"The specific car was not found - carId {id}", nameof(CarController));
+                // Log car not found
+                await _logWriterService.WriteLogAsync(
+                    LearningEF.Api.Models.LogLevel.Warning, 
+                    $"{nameof(CarController)} The specific car was not found - carId {id}",
+                    null,
+                    new { CarIdAttempted = id }
+                );
 
                 // HTTP 404: The car was not found or update failed
                 return NotFound($"Car with ID {id} not found.");

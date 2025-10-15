@@ -20,7 +20,7 @@ namespace LearningEF.Api.Services
         }
 
         public async Task<bool> CreateCarAsync(Car newCar)
-        {            
+        {
             try
             {
                 newCar.DateCreated = DateTime.Now;
