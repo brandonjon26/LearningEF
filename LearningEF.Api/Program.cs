@@ -1,9 +1,12 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using LearningEF.Api.Services;
+﻿using FluentValidation;
 using LearningEF.Api.Data;
 using LearningEF.Api.Repositories;
+using LearningEF.Api.Services;
+using LearningEF.Api.Validation;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using System.Reflection;
 
 
 
@@ -52,6 +55,9 @@ builder.Services.AddCors(options =>
 
 // Add Controller Services (and related MVC services)
 builder.Services.AddControllers();
+
+// Add the Fluent Validation service registration
+builder.Services.AddValidatorsFromAssemblyContaining<CarValidator>();
 
 // Register Swagger
 builder.Services.AddSwaggerGen();
