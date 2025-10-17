@@ -1,6 +1,7 @@
 ﻿using LearningEF.Api.Data;
 using LearningEF.Api.Models;
 using LearningEF.Api.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
@@ -12,6 +13,7 @@ using static System.Net.WebRequestMethods;
 // Controller for all API operations related to the Car resource
 [Route("api/[controller]")] // Sets the base route to /api/car
 [ApiController]
+[Authorize]
 public class CarController : ControllerBase
 {    
     private readonly CarInterface _carService;
