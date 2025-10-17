@@ -1,12 +1,17 @@
-﻿using FluentValidation;
+﻿using System.Reflection;
+using System.Text;
+using FluentValidation;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
+using Swashbuckle.AspNetCore.Filters;
 using LearningEF.Api.Data;
 using LearningEF.Api.Repositories;
 using LearningEF.Api.Services;
 using LearningEF.Api.Validation;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using System.Reflection;
 
 
 
@@ -60,7 +65,49 @@ builder.Services.AddControllers();
 builder.Services.AddValidatorsFromAssemblyContaining<CarValidator>();
 
 // Register Swagger
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(options =>
+{
+    // 1. Define the JWT security scheme
+    options.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
+    {
+        Description = "Standard Authorization header using the Bearer scheme. Example: \"Bearer {token}\"",
+        In = ParameterLocation.Header,
+        Name = "Authorization",
+        Type = SecuritySchemeType.ApiKey
+    });
+
+    // 2. Add the operation filter to include the security definition on protected endpoints
+    options.OperationFilter<SecurityRequirementsOperationFilter>();
+});
+
+// Add Authentication Service
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+})
+// Configure the JWT Bearer scheme parameters
+.AddJwtBearer(options =>
+{
+    // Get the IConfiguration object via the builder
+    var configuration = builder.Configuration;
+
+    options.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuer = true,
+        ValidateAudience = true,
+        ValidateLifetime = true,
+        ValidateIssuerSigningKey = true,
+
+        // Retrieve values from the "Jwt" section of appsettings.json
+        ValidIssuer = configuration["Jwt:Issuer"],
+        ValidAudience = configuration["Jwt:Audience"],
+        IssuerSigningKey = new SymmetricSecurityKey(
+            Encoding.UTF8.GetBytes(configuration["Jwt:SecretKey"] ??
+            throw new InvalidOperationException("JWT Secret Key not found in configuration."))
+        )
+    };
+});
 
 // --------------------------------------------
 // 3. BUILD AND CONFIGURE APPLICATION PIPELINE
@@ -86,6 +133,7 @@ app.UseRouting();
 // Activate CORS Here
 app.UseCors(MyAllowFrontendPolicy);
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 // 4. MAP CONTROLLER ENDPOINTS HERE
