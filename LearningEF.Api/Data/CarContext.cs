@@ -10,9 +10,18 @@ namespace LearningEF.Api.Data
 {
     public class CarContext : DbContext
     {
-        public DbSet<Car> Cars { get; set; }
+        public virtual DbSet<Car> Cars { get; set; }
 
         public CarContext(DbContextOptions<CarContext> options) : base(options)
+        {
+        }
+
+        /// <summary>
+        /// Add a protected parameterless constructor for Moq.
+        /// This allows Moq to create the proxy class, but prevents external code
+        /// from instantiating the context incorrectly.
+        /// </summary>
+        protected CarContext()
         {
         }
 
