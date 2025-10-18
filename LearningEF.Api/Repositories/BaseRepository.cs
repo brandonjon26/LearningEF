@@ -8,14 +8,16 @@ namespace LearningEF.Api.Repositories
         // DbContext is protected so derived classes can access it
         protected readonly DbContext _context;
         // Define DbSet<T> using generic type parameter T
-        protected readonly DbSet<T> _dbSet;
+        //protected readonly DbSet<T> _dbSet;
 
         public BaseRepository(DbContext context)
         {
             _context = context;
             // Get the correct DbSet from the context based on the Type T
-            _dbSet = context.Set<T>();
+            //_dbSet = context.Set<T>();
         }
+
+        protected DbSet<T> DbSet => _context.Set<T>();
 
         public virtual async Task<int> SaveChangesAsync()
         {
@@ -26,7 +28,7 @@ namespace LearningEF.Api.Repositories
         public virtual async Task<T?> GetByIdAsync(TId id)
         {
             // Get the specific entity
-            return await _dbSet.FindAsync(id);
+            return await DbSet.FindAsync(id);
         }
     }
 }
