@@ -4,6 +4,35 @@
   /* Ensure the container uses the full width established in index.css */
 }
 
+.logout-area {
+  display: flex;
+  justify-content: flex-end; /* Pushes the button to the right */
+  margin-bottom: 20px; /* Adds space between the button and the content layout */
+}
+
+.logout-button {
+  padding: 8px 16px;
+  background-color: var(
+    --color-danger,
+    #dc3545
+  ); /* A clear, distinct color for danger/logout */
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.2s ease;
+}
+
+.logout-button:hover:not(:disabled) {
+  background-color: #c82333; /* Darker red on hover */
+}
+
+.logout-button:disabled {
+  background-color: #6c757d; /* Greyed out when disabled */
+  cursor: not-allowed;
+}
+
 .content-layout {
   display: flex;
   gap: 30px; /* Space between the two columns (List and Form) */

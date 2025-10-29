@@ -1,18 +1,35 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { flushSync } from "react-dom";
+import { useAuth } from "../../AuthContext";
 import { getCars, deleteCar } from "../../api/CarService"; // Import the service function
 import CarList from "../../components/CarList/CarList"; // Import the UI component
 import CarForm from "../../components/CarForm/CarForm";
 import styles from "./CarDashboard.module.css";
 
 const CarDashboard = () => {
+  const { logout, isLoggedIn } = useAuth();
   const [cars, setCars] = useState([]); // Data storage
   const [loading, setLoading] = useState(true); // UI/Logic indicators
   const [error, setError] = useState(null);
   const [editingCar, setEditingCar] = useState(null); // Editing Car
 
+  // --- New Logout Handler ---
+  const handleLogout = () => {
+    logout();
+    // The application will automatically redirect to /login via the PrivateRoute wrapper
+    // Clean up local state, though component will unmount/re-render soon
+    setCars([]);
+    setEditingCar(null);
+  };
+
   // Define Fetch Logic in a reusable function (*useCallback*)
   const fetchCars = useCallback(async () => {
+    // Only attempt to fetch if we are actually logged in
+    if (!isLoggedIn) {
+      setLoading(false);
+      return;
+    }
+
     setLoading(true);
     setError(null);
     try {
@@ -22,19 +39,32 @@ const CarDashboard = () => {
       // Update state on success
       setCars(data);
     } catch (err) {
-      // Update error state on failure
-      setError("Failed to load cars. Please check the API connection.");
+      const errorMessage = err.message || "";
+      if (
+        errorMessage.includes("unauthorized") ||
+        errorMessage.includes("expired")
+      ) {
+        // If the service throws an auth error, clear the session state.
+        setError("Session expired. Logging out...");
+        setTimeout(logout, 1500); // Wait briefly before logging out
+      } else {
+        // Update error state on failure
+        setError("Failed to load cars. Please check the API connection.");
+      }
       console.error("Fetch error details:", err);
     } finally {
       // Always turn off loading indicator
       setLoading(false);
     }
-  }, []);
+  }, [isLoggedIn, logout]); // Dependency on isLoggedIn and logout
 
   // useEffect hook is where side effects occur - Initial Data Load
   useEffect(() => {
-    fetchCars();
-  }, [fetchCars]);
+    // Only run fetchCars if isLoggedIn state is true
+    if (isLoggedIn) {
+      fetchCars();
+    }
+  }, [fetchCars, isLoggedIn]);
 
   // Handler for successful form submission (OPTIMISTIC UPDATE) ---
   const handleCarAdded = (newCar) => {
@@ -101,6 +131,16 @@ const CarDashboard = () => {
 
   return (
     <div className={styles["dashboard-container"]}>
+      {/* Logout Button Area */}
+      <div className={styles["logout-area"]}>
+        <button
+          onClick={handleLogout}
+          disabled={!isLoggedIn}
+          className={styles["logout-button"]}
+        >
+          Logout
+        </button>
+      </div>
       {/* The main content layout area */}
       <div className={styles["content-layout"]}>
         {/* Left Side: Car List */}
