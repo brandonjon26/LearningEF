@@ -1,6 +1,42 @@
 import { BASE_API_URL } from "./apiConfig";
+import { getToken } from "./LoginService";
 
 const CARS_URL = `${BASE_API_URL}/Car`;
+
+/**
+ * 🛠️ Internal Helper: Creates the necessary headers, including the JWT token.
+ * It's called for every API request below.
+ * @param {object} options - Optional fetch configuration object.
+ * @returns {object} The fetch configuration object with Authorization headers added.
+ */
+
+const authorizedFetch = (options = {}) => {
+  const token = getToken(); // Get the token from localStorage via LoginService
+
+  if (!token) {
+    // If we're hitting a secured endpoint, and no token exists, throw
+    // This will be caught by the calling component, allowing it to redirect to login
+    throw new Error("Unauthorized access: Authentication token not found.");
+  }
+
+  // Define the base headers
+  const authHeaders = {
+    "Content-Type": "application/json",
+    // 🔑 Inject the token here: "Authorization: Bearer [token]"
+    Authorization: `Bearer ${token}`,
+  };
+
+  // Merge provided options with authorization headers
+  const config = {
+    ...options,
+    headers: {
+      ...authHeaders,
+      ...options.headers, // Allow consumers to override headers if needed
+    },
+  };
+
+  return config;
+};
 
 /**
  * Fetches the list of all cars from the ASP.NET Core API.
@@ -9,10 +45,14 @@ const CARS_URL = `${BASE_API_URL}/Car`;
 
 export const getCars = async () => {
   try {
-    const response = await fetch(CARS_URL);
+    // Use authorizedFetch to get the headers
+    const config = authorizedFetch({ method: "GET" });
+    const response = await fetch(CARS_URL, config);
 
     if (!response.ok) {
-      // Throw an error if the HTTP status code indicates failure (4xx or 5xx)
+      if (response.status === 401 || response.status === 403) {
+        throw new Error("Session expired or unauthorized. Please log in.");
+      }
       throw new Error(`HTTP error! status: ${response.status}`);
     }
 
@@ -27,16 +67,17 @@ export const getCars = async () => {
 
 export const addCar = async (data) => {
   try {
-    const response = await fetch(CARS_URL, {
+    const config = authorizedFetch({
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
       body: JSON.stringify(data),
     });
 
+    const response = await fetch(CARS_URL, config);
+
     if (!response.ok) {
-      // Throw an error if the HTTP status code indicates failure (4xx or 5xx)
+      if (response.status === 401 || response.status === 403) {
+        throw new Error("Session expired or unauthorized. Please log in.");
+      }
       throw new Error(`HTTP error! status: ${response.status}`);
     }
 
@@ -59,17 +100,17 @@ export const updateCar = async (carId, carData) => {
   const UPDATE_URL = `${CARS_URL}/${carId}`;
 
   try {
-    const response = await fetch(UPDATE_URL, {
+    const config = authorizedFetch({
       method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-
       body: JSON.stringify(carData),
     });
 
+    const response = await fetch(UPDATE_URL, config);
+
     if (!response.ok) {
-      // Check for 4xx or 5xx errors
+      if (response.status === 401 || response.status === 403) {
+        throw new Error("Session expired or unauthorized. Please log in.");
+      }
       throw new Error(`HTTP error! status: ${response.status}`);
     }
 
@@ -91,12 +132,14 @@ export const deleteCar = async (carId) => {
   const DELETE_URL = `${CARS_URL}/${carId}`;
 
   try {
-    const response = await fetch(DELETE_URL, {
-      method: "DELETE",
-    });
+    const config = authorizedFetch({ method: "DELETE" });
+
+    const response = await fetch(DELETE_URL, config);
 
     if (!response.ok) {
-      // Check for 4xx or 5xx errors
+      if (response.status === 401 || response.status === 403) {
+        throw new Error("Session expired or unauthorized. Please log in.");
+      }
       throw new Error(`HTTP error! status: ${response.status}`);
     }
 
